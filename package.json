@@ -3,13 +3,15 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-      "start": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
-      "start:client": "npm run dev --prefix client",
-      "start:server": "npm run dev --prefix server",
-      "install": "npm install && npm install --legacy-peer-deps --prefix client && npm install --prefix server"
+        "start": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
+        "start:client": "npm run dev --prefix client",
+        "start:server": "npm run dev --prefix server",
+        "install": "npm install && npm install --legacy-peer-deps --prefix client && npm install --prefix server"
     },
     "devDependencies": {
-      "concurrently": "^8.0.1"
+        "concurrently": "^8.0.1"
+    },
+    "dependencies": {
+        "axios": "^1.7.9"
     }
-  }
-  
+}
