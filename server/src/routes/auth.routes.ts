@@ -1,8 +1,9 @@
 import express from "express";
+import { registerUser } from "../controllers/auth.controller";
 
 const authRoutes = express.Router();
-authRoutes.post("/register", (req, res) => {console.log(req.body)
-    res.status(200).json({message:"Registered"})
-});
+authRoutes.post("/register", registerUser);
+authRoutes.post('/login', (()=> {}))
 
-export default authRoutes
+
+export default authRoutes;

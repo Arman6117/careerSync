@@ -11,8 +11,8 @@ const RegisterPage = () => {
         email: "Example.com",
         password: "1234",
       })
-      .then(() => console.log("Submitted"))
-      .catch((err) => console.log(err));
+      .then((res) => console.log(res.data, res.status,res.headers))
+      .catch((err) => console.log(err.message));
   };
   return (
     <div>
