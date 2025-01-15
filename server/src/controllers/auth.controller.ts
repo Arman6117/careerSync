@@ -22,7 +22,7 @@ export const registerUser = async (req: Request, res: Response) => {
         id: newUser._id,
       },
       process.env.ACCESS_TOKEN_SECRET || "fallbackAccessTokenSecret",
-      { expiresIn: "15m" }
+      { expiresIn: "1h" }
     );
     
     const refreshToken = jwt.sign(
