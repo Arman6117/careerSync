@@ -15,12 +15,10 @@ export const registerUser = async (
     const existingUser = await User.findOne({ email: email });
 
     if (existingUser) {
-      res
-        .status(409)
-        .json({
-          success: false,
-          message: "Email already exists please login!",
-        });
+      res.status(409).json({
+        success: false,
+        message: "Email already exists please login!",
+      });
       return;
     }
 
@@ -32,9 +30,9 @@ export const registerUser = async (
       token: refreshToken,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), //* 7 Days
     });
-
     await newUser.save();
 
+    //TODO:Send email verification token and verify email
     res.status(201).json({
       success: true,
       message: "User registered successfully",
@@ -59,29 +57,29 @@ export const registerUser = async (
 };
 
 export const loginUser = async (req: Request, res: Response) => {
-
   try {
     const { email, password } = req.body;
- 
+
     if (!email && !password) {
       res
         .status(400)
         .json({ success: false, message: "Please provide credentials" });
       return;
     }
-    const existingUser = await User.findOne({ email }).select('+password');
+    const existingUser = await User.findOne({ email }).select("+password");
 
     if (!existingUser) {
       res.status(404).json({ success: false, message: "User does not exists" });
       return;
     }
     const isMatch = await bcryptjs.compare(password, existingUser.password);
-   
+
     if (!isMatch) {
       res.status(400).json({ success: false, message: "Invalid password" });
       return;
     }
-
+    //TODO:Add reset password functionality
+    
     const accessToken = generateAccessToken(
       existingUser._id as unknown as string
     );
@@ -93,8 +91,8 @@ export const loginUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({
-      success:false,
-      message:"Something went wrong"
-    })
+      success: false,
+      message: "Something went wrong",
+    });
   }
 };
