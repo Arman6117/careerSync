@@ -91,5 +91,10 @@ export const loginUser = async (req: Request, res: Response) => {
       message: "Successfully logged in",
       accessToken,
     });
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json({
+      success:false,
+      message:"Something went wrong"
+    })
+  }
 };
