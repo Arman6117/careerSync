@@ -3,7 +3,7 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import User from "../models/user";
-import { generateAccessToken } from "../utils/tokens";
+import { generateAccessToken, generateRefreshToken } from "../utils/tokens";
 
 export const registerUser = async (
   req: Request,
@@ -24,7 +24,7 @@ export const registerUser = async (
 
     const newUser = new User({ name, email, password });
     const accessToken = generateAccessToken(newUser._id as unknown as string);
-    const refreshToken = generateAccessToken(newUser._id as unknown as string);
+    const refreshToken = generateRefreshToken(newUser._id as unknown as string);
 
     newUser.refreshTokens?.push({
       token: refreshToken,
@@ -33,11 +33,22 @@ export const registerUser = async (
     await newUser.save();
 
     //TODO:Send email verification token and verify email
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
     res.status(201).json({
       success: true,
       message: "User registered successfully",
-      accessToken,
-      refreshToken,
     });
   } catch (error: any) {
     console.error("Error during registration:", error);
@@ -79,15 +90,30 @@ export const loginUser = async (req: Request, res: Response) => {
       return;
     }
     //TODO:Add reset password functionality
-    
+
     const accessToken = generateAccessToken(
       existingUser._id as unknown as string
     );
 
+    const refreshToken = generateRefreshToken(
+      existingUser._id as unknown as string
+    );
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
     res.status(200).json({
       success: true,
       message: "Successfully logged in",
-      accessToken,
     });
   } catch (error) {
     res.status(500).json({

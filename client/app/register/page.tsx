@@ -11,7 +11,7 @@ const RegisterPage = () => {
         email: "Example.com",
         password: "1234",
       })
-      .then((res) => console.log(res.data, res.status,res.headers))
+      .then((res) => console.log(res.data))
       .catch((err) => console.log(err.message));
   };
   return (
