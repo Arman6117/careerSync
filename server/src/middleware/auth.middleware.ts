@@ -1,34 +1,31 @@
-import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 
-export const authenticateUserMiddleware = async (
-  req: Request,
-  res: Response,
+export const authenticateUserMiddleware = (
+  req: Request, 
+  res: Response, 
   next: NextFunction
-) => {
+): void => {
   try {
-    const token = req.headers.cookie?.split(" ")[0].split("=")[1];
-    console.log(token)
+    const token = req.headers.cookie?.split(";")
+      .find(cookie => cookie.trim().startsWith("accessToken="))
+      ?.split("=")[1];
+
     if (!token) {
-        console.log("inside if")
       res.status(401).json({
         success: false,
-        message: "No token provided",
+        message: "No token provided"
       });
-      
       return;
     }
-    console.log("outside if")
-    const secret = "fallbackAccessTokenSecret";
-    console.log("Above decode")
-    console.log(jwt.verify(token, secret));
-   console.log("Decoded")
-    res.status(200).json("User authorized");
-    next(); //
+
+    const secret = process.env.JWT_SECRET || "fallbackAccessTokenSecret";
+    jwt.verify(token, secret);
+    next();
   } catch (error) {
-    console.log("Inside error")
-    res
-      .status(401)
-      .json({ success: false, message: "Invalid or expired token!" });
+    res.status(401).json({ 
+      success: false, 
+      message: "Invalid or expired token!" 
+    });
   }
 };
