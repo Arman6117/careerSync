@@ -24,8 +24,13 @@ export const authenticateUserMiddleware = (
     }
 
     const secret = process.env.JWT_SECRET || "fallbackAccessTokenSecret";
-    const decode = jwt.verify(token, secret);
+    const decode = jwt.verify(token, secret) as JwtPayload;
+    const expTime = decode.exp!;
+    const issuedTime = decode.iat!
+    const checkExp = new Date((expTime - issuedTime )* 1000).getMinutes()
+    console.log(checkExp)
     req.user = decode as jwt.JwtPayload;
+    
     next();
   } catch (error) {
     res.status(401).json({
