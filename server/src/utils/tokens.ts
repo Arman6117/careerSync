@@ -1,9 +1,12 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
+
+const accessTokenExpiry  = process.env.ACCESS_TOKEN_EXPIRY || "15m"
+const refreshTokenExpiry  = process.env.REFRESH_TOKEN_EXPIRY|| "7d"
 export const generateAccessToken = (id: string) => {
   const accessToken = jwt.sign(
     { id },
     process.env.ACCESS_TOKEN_SECRET || "fallbackAccessTokenSecret",
-    { expiresIn: "1m" }
+    { expiresIn: accessTokenExpiry }
   );
   return accessToken;
 };
@@ -13,14 +16,23 @@ export const generateRefreshToken = (id: string) => {
     { id },
     process.env.REFRESH_TOKEN_SECRET || "fallbackRefreshTokenSecret",
 
-    { expiresIn: "7d" }
+    { expiresIn: refreshTokenExpiry }
   );
 
   return refreshToken;
 };
 
-export const refreshAccessToken = (refreshToken: string) => {
-  const secret =
-    process.env.REFRESH_TOKEN_SECRET || "fallbackRefreshTokenSecret";
-  const decoded = jwt.verify(refreshToken,secret);
+export const refreshAccessToken = (refreshTokenId: string | JwtPayload) => {
+  const newAccessToken = jwt.sign(
+    { id: refreshTokenId },
+    process.env.ACCESS_TOKEN_SECRET || "fallbackAccessTokenSecret",
+    { expiresIn: accessTokenExpiry }
+  );
+  const newRefreshToken = jwt.sign(
+    { id: refreshTokenId },
+    process.env.REFRESH_TOKEN_SECRET || "fallbackRefreshTokenSecret",
+    { expiresIn: refreshTokenExpiry }
+  );
+
+  return {newAccessToken,newRefreshToken}
 };
