@@ -122,3 +122,22 @@ export const loginUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const logoutUser =  (req: Request, res: Response) => {
+  try {
+    res.clearCookie('accessToken', {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production'
+    })
+    res.status(200).json({
+      success:true,
+      message:'Successfully logged out'
+    })
+  } catch (error) {
+    res.status(500).json({
+      success:false,
+      message:'Something went wrong'
+    })
+  }
+}

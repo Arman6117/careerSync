@@ -24,7 +24,7 @@ export const authenticateUserMiddleware = (
     if (!token) {
       res.status(401).json({
         success: false,
-        message: "No token provided",
+        message: "NoTokenError",
       });
       return;
     }
@@ -59,7 +59,7 @@ export const authenticateUserMiddleware = (
             if (!decodedRefreshToken) {
               res.status(401).json({
                 success: false,
-                message: "No token provided",
+                message: "NoTokenError",
               });
               return;
             }
@@ -89,7 +89,7 @@ export const authenticateUserMiddleware = (
   } catch (error) {
     res.status(401).json({
       success: false,
-      message: "Invalid or expired token!",
+      message: "InvalidTokenError",
     });
   }
 };
