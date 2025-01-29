@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
 import User from "../models/user";
 import { generateAccessToken, generateRefreshToken } from "../utils/tokens";
@@ -30,9 +31,9 @@ export const registerUser = async (
       token: refreshToken,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), //* 7 Days
     });
+    //TODO:Send email verification token and verify email
     await newUser.save();
 
-    //TODO:Send email verification token and verify email
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 1000,
@@ -89,7 +90,6 @@ export const loginUser = async (req: Request, res: Response) => {
       res.status(400).json({ success: false, message: "Invalid password" });
       return;
     }
-    //TODO:Add reset password functionality
 
     const accessToken = generateAccessToken(
       existingUser._id as unknown as string
@@ -100,7 +100,7 @@ export const loginUser = async (req: Request, res: Response) => {
     );
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      maxAge: 15*60 * 1000,
+      maxAge: 15 * 60 * 1000,
       sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
     });
@@ -123,21 +123,55 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-export const logoutUser =  (req: Request, res: Response) => {
+export const logoutUser = (req: Request, res: Response) => {
   try {
-    res.clearCookie('accessToken', {
+    res.clearCookie("accessToken", {
       httpOnly: true,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production'
-    })
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
     res.status(200).json({
-      success:true,
-      message:'Successfully logged out'
-    })
+      success: true,
+      message: "Successfully logged out",
+    });
   } catch (error) {
     res.status(500).json({
-      success:false,
-      message:'Something went wrong'
-    })
+      success: false,
+      message: "Something went wrong",
+    });
   }
-}
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        message: "UserNotFoundError",
+      });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service:'gmail',
+      auth:{
+       user:'armanp384@gmail.com',
+       pass:'Arman384!!!'
+      }
+    })
+    const mailOptions = {
+      from: 'armanp384@gmail.com',
+      to: 'vanixgaming634@yahoo.com',
+      subject: 'Sending Email using Node.js',
+      text: 'That was easy!'
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  } catch (error) {}
+};
