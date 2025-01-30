@@ -4,7 +4,12 @@ import jwt from "jsonwebtoken";
 import { Resend } from "resend";
 
 import User from "../models/user";
-import { generateAccessToken, generateRefreshToken } from "../utils/tokens";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  generateResetPasswordToken,
+} from "../utils/tokens";
+import { sendResetPasswordEmail } from "../utils/mail";
 
 export const registerUser = async (
   req: Request,
@@ -142,34 +147,33 @@ export const logoutUser = (req: Request, res: Response) => {
   }
 };
 
-export const forgotPassword = async (req: Request, res: Response) => {
+export const sendForgotPasswordEmail = async (req: Request, res: Response) => {
   const { email } = req.body;
+
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      res.status(404).json({
-        success: false,
-        message: "UserNotFoundError",
-      });
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+    const token = generateResetPasswordToken(user._id as unknown as string);
+    const { data, error } = await sendResetPasswordEmail(email, token);
+    if (error) {
+      res.status(500).json({ success: false, message: error });
+      return;
     }
 
-    const resend = new Resend(
-      process.env.RESEND_API_KEY || "re_fbhpYLCj_2Bni1bkG6zCkpc7YygpimXd7"
-    );
-    const { data, error } = await resend.emails.send({
-      from: "onboarding@resend.dev",
-      to: "armanp384@gmail.com",
-      subject: "Testing",
-      html: "<p>It works</p>",
+    user.resetPasswordToken.push({
+      token,
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000),
     });
+    await user.save();
 
-    if(error) {
-       res.status(400).json({error})
-       return
-    }
-
-    res.status(200).json({data})
+    res.status(200).json({
+      success: true,
+      message: "Reset password email sent successfully",
+    });
   } catch (error) {
-    res.status(500).json({message:"Something went wrong"})
+    res.status(500).json({ message: "Something went wrong" });
   }
 };

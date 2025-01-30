@@ -43,17 +43,24 @@ const UserSchema = new mongoose.Schema({
     type: Object,
     default: {},
   },
-  refreshTokens:[ {
-    token: String,
-    expiresAt: Date 
-  }],
-  accessToken: String,
+  refreshTokens: [
+    {
+      token: String,
+      expiresAt: Date,
+    },
+  ],
+  resetPasswordToken: [
+    {
+      token: String,
+      expiresAt: Date,
+    },
+  ],
 });
 
 UserSchema.pre("save", async function (next) {
   const user = this;
 
-  //!Don't anything if password is not changed
+  //!Don't do anything if password is not changed
   if (!user.isModified("password")) return next();
 
   const salt = await bcrypt.genSalt(10);
