@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 import User from "../models/user";
 import { generateAccessToken, generateRefreshToken } from "../utils/tokens";
@@ -153,25 +153,23 @@ export const forgotPassword = async (req: Request, res: Response) => {
       });
     }
 
-    const transporter = nodemailer.createTransport({
-      service:'gmail',
-      auth:{
-       user:'armanp384@gmail.com',
-       pass:'Arman384!!!'
-      }
-    })
-    const mailOptions = {
-      from: 'armanp384@gmail.com',
-      to: 'vanixgaming634@yahoo.com',
-      subject: 'Sending Email using Node.js',
-      text: 'That was easy!'
-    };
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Email sent: ' + info.response);
-      }
+    const resend = new Resend(
+      process.env.RESEND_API_KEY || "re_fbhpYLCj_2Bni1bkG6zCkpc7YygpimXd7"
+    );
+    const { data, error } = await resend.emails.send({
+      from: "onboarding@resend.dev",
+      to: "armanp384@gmail.com",
+      subject: "Testing",
+      html: "<p>It works</p>",
     });
-  } catch (error) {}
+
+    if(error) {
+       res.status(400).json({error})
+       return
+    }
+
+    res.status(200).json({data})
+  } catch (error) {
+    res.status(500).json({message:"Something went wrong"})
+  }
 };
