@@ -177,3 +177,25 @@ export const sendForgotPasswordEmail = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const resetUserPassword =async (req:Request,res:Response) => {
+  const {token} = req.body
+  if(!token) {
+    res.status(400).json({success:false, message:"Token is missing"})
+    return
+  }
+
+  try {
+    const secret = Buffer.from( "fallbackResetPasswordTokenSecret", "base64");
+    console.log(token)
+    console.log("The secret key expected: ",secret )
+    const d = decodeURIComponent(token)
+    console.log("Decode uri component: ", d);
+    const decode = jwt.verify(d.trim(), "fallbackResetPasswordTokenSecret");
+    console.log(decode)
+
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({success:false, message:"Something went wrong"})
+  }
+}

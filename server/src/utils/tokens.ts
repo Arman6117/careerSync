@@ -40,7 +40,7 @@ export const refreshAccessToken = (refreshTokenId: string | JwtPayload) => {
 export const generateResetPasswordToken = (id:string) => {
   const resetPasswordToken = jwt.sign(
     {id},
-    process.env.RESET_PASSWORD_TOKEN_SECRET || "fallbackResetPasswordTokenSecret",
+  "fallbackResetPasswordTokenSecret",
     {expiresIn: "15m"}
   )
 
