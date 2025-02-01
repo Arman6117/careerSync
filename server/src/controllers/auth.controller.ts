@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { Resend } from "resend";
 
 import User from "../models/user";
@@ -178,24 +178,47 @@ export const sendForgotPasswordEmail = async (req: Request, res: Response) => {
   }
 };
 
-export const resetUserPassword =async (req:Request,res:Response) => {
-  const {token} = req.body
-  if(!token) {
-    res.status(400).json({success:false, message:"Token is missing"})
-    return
+export const resetUserPassword = async (req: Request, res: Response) => {
+  const { token, newPassword } = req.body;
+  if (!token) {
+    res.status(400).json({ success: false, message: "Token is missing" });
+    return;
   }
 
   try {
-    const secret = Buffer.from( "fallbackResetPasswordTokenSecret", "base64");
-    console.log(token)
-    console.log("The secret key expected: ",secret )
-    const d = decodeURIComponent(token)
-    console.log("Decode uri component: ", d);
-    const decode = jwt.verify(d.trim(), "fallbackResetPasswordTokenSecret");
-    console.log(decode)
+    const secret = Buffer.from("fallbackResetPasswordTokenSecret", "base64");
 
+    const decodedUriToken = decodeURIComponent(token);
+
+    jwt.verify(
+      decodedUriToken.trim(),
+      "fallbackResetPasswordTokenSecret",
+      async (resetError, resetDecode) => {
+        if (resetError?.name === "TokenExpiredError") {
+          res.status(401).json({ success: false, message: "Link expired" });
+          return;
+        }
+        if (!resetDecode) {
+          res.status(401).json({ success: false, message: "NoTokenError" });
+          return;
+        }
+
+        const user = await User.findById((resetDecode as JwtPayload).id);
+        if (!user) {
+          res.status(404).json({ success: false, message: "User not found" });
+          return;
+        }
+
+        await user.updateOne({ password: newPassword });
+        await user.save();
+      }
+    );
+
+    res
+      .status(201)
+      .json({ success: true, message: "Password updated successfully" });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({success:false, message:"Something went wrong"})
+    console.log(error);
+    res.status(500).json({ success: false, message: "Something went wrong" });
   }
-}
+};

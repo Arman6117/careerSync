@@ -1,8 +1,13 @@
-import React from 'react'
+'use client'
+
+import { useParams, useSearchParams } from "next/navigation"
 
 const ResetPasswordPage = () => {
+const params = useSearchParams();
+const token = params.get("token")?.replace('/','')
+
   return (
-    <div>ResetPasswordPage</div>
+    <div>{token}</div>
   )
 }
 
