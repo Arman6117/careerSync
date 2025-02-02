@@ -209,6 +209,7 @@ export const resetUserPassword = async (req: Request, res: Response) => {
           return;
         }
 
+        user.set('resetPasswordToken', []);
         await user.updateOne({ password: newPassword });
         await user.save();
       }
@@ -218,7 +219,7 @@ export const resetUserPassword = async (req: Request, res: Response) => {
       .status(201)
       .json({ success: true, message: "Password updated successfully" });
   } catch (error) {
-    console.log(error);
+    
     res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };
