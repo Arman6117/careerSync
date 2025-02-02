@@ -186,13 +186,13 @@ export const resetUserPassword = async (req: Request, res: Response) => {
   }
 
   try {
-    const secret = Buffer.from("fallbackResetPasswordTokenSecret", "base64");
+    const secret = Buffer.from(process.env.RESET_PASSWORD_TOKEN_SECRET ||"fallbackResetPasswordTokenSecret", "base64");
 
     const decodedUriToken = decodeURIComponent(token);
 
     jwt.verify(
       decodedUriToken.trim(),
-      "fallbackResetPasswordTokenSecret",
+      process.env.RESET_PASSWORD_TOKEN_SECRET ||"fallbackResetPasswordTokenSecret",
       async (resetError, resetDecode) => {
         if (resetError?.name === "TokenExpiredError") {
           res.status(401).json({ success: false, message: "Link expired" });
