@@ -55,6 +55,12 @@ const UserSchema = new mongoose.Schema({
       expiresAt: Date,
     },
   ],
+  emailVerificationToken: [
+    {
+      token: String,
+      expiresAt: Date,
+    },
+  ],
 });
 
 UserSchema.pre("save", async function (next) {

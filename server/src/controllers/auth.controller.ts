@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { Resend } from "resend";
 
 import User from "../models/user";
 import {
   generateAccessToken,
+  generateEmailVerificationToken,
   generateRefreshToken,
   generateResetPasswordToken,
 } from "../utils/tokens";
-import { sendResetPasswordEmail } from "../utils/mail";
+import { sendResetPasswordEmail, sendVerificationEmail } from "../utils/mail";
 
 export const registerUser = async (
   req: Request,
@@ -36,7 +36,21 @@ export const registerUser = async (
       token: refreshToken,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), //* 7 Days
     });
-    //TODO:Send email verification token and verify email
+    const emailVerificationToken = generateEmailVerificationToken(
+      newUser._id as unknown as string
+    );
+    const { data, error } = await sendVerificationEmail(
+      email,
+      emailVerificationToken
+    );
+    if (error) {
+      res.status(500).json({ success: false, message: error });
+      return
+    }
+    newUser.emailVerificationToken.push({
+      token: emailVerificationToken,
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+    });
     await newUser.save();
 
     res.cookie("accessToken", accessToken, {
@@ -54,7 +68,7 @@ export const registerUser = async (
     });
     res.status(201).json({
       success: true,
-      message: "User registered successfully",
+      message: "Email sent for verification",
     });
   } catch (error: any) {
     console.error("Error during registration:", error);
@@ -95,7 +109,11 @@ export const loginUser = async (req: Request, res: Response) => {
       res.status(400).json({ success: false, message: "Invalid password" });
       return;
     }
-
+   const isEmailVerified = existingUser.isVerified
+   if(!isEmailVerified){
+      res.status(403).json({success:false, message: "Please verify your email to login"})
+      return
+   }
     const accessToken = generateAccessToken(
       existingUser._id as unknown as string
     );
@@ -186,13 +204,18 @@ export const resetUserPassword = async (req: Request, res: Response) => {
   }
 
   try {
-    const secret = Buffer.from(process.env.RESET_PASSWORD_TOKEN_SECRET ||"fallbackResetPasswordTokenSecret", "base64");
+    const secret = Buffer.from(
+      process.env.RESET_PASSWORD_TOKEN_SECRET ||
+        "fallbackResetPasswordTokenSecret",
+      "base64"
+    );
 
     const decodedUriToken = decodeURIComponent(token);
 
     jwt.verify(
       decodedUriToken.trim(),
-      process.env.RESET_PASSWORD_TOKEN_SECRET ||"fallbackResetPasswordTokenSecret",
+      process.env.RESET_PASSWORD_TOKEN_SECRET ||
+        "fallbackResetPasswordTokenSecret",
       async (resetError, resetDecode) => {
         if (resetError?.name === "TokenExpiredError") {
           res.status(401).json({ success: false, message: "Link expired" });
@@ -209,7 +232,7 @@ export const resetUserPassword = async (req: Request, res: Response) => {
           return;
         }
 
-        user.set('resetPasswordToken', []);
+        user.set("resetPasswordToken", []);
         await user.updateOne({ password: newPassword });
         await user.save();
       }
@@ -219,7 +242,21 @@ export const resetUserPassword = async (req: Request, res: Response) => {
       .status(201)
       .json({ success: true, message: "Password updated successfully" });
   } catch (error) {
-    
     res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };
+
+
+export const verifyUserEmail =  async (req: Request, res: Response) => {
+  const {token }  = req.body
+  try {
+    if(!token){
+      res.status(400).json({success:false, message: "Token is missing"})
+      return
+    }
+
+     await jwt.verify(token,process.env.RESET__TOKEN_SECRET ||"fallbackResetPasswordTokenSecret",)
+  } catch (error) {
+    
+  }
+}

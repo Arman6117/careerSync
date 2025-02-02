@@ -19,3 +19,17 @@ export const sendResetPasswordEmail = async (
     `,
   });
 };
+export const sendVerificationEmail = async (
+  email: string,
+  token: string
+) => {
+    const resetLink = `${domain}/verify-email?token=${token}`;
+
+  return await resend.emails.send({
+    from: "onboarding@resend.dev",
+    to: "armanp384@gmail.com",
+    subject: "Verify your email",
+    html: `<p>Click here <a href=${resetLink}/> to verify your email</p>
+    `,
+  });
+};
