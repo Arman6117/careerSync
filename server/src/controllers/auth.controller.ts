@@ -45,7 +45,7 @@ export const registerUser = async (
     );
     if (error) {
       res.status(500).json({ success: false, message: error });
-      return
+      return;
     }
     newUser.emailVerificationToken.push({
       token: emailVerificationToken,
@@ -109,11 +109,13 @@ export const loginUser = async (req: Request, res: Response) => {
       res.status(400).json({ success: false, message: "Invalid password" });
       return;
     }
-   const isEmailVerified = existingUser.isVerified
-   if(!isEmailVerified){
-      res.status(403).json({success:false, message: "Please verify your email to login"})
-      return
-   }
+    const isEmailVerified = existingUser.isVerified;
+    if (!isEmailVerified) {
+      res
+        .status(403)
+        .json({ success: false, message: "Please verify your email to login" });
+      return;
+    }
     const accessToken = generateAccessToken(
       existingUser._id as unknown as string
     );
@@ -246,17 +248,27 @@ export const resetUserPassword = async (req: Request, res: Response) => {
   }
 };
 
-
-export const verifyUserEmail =  async (req: Request, res: Response) => {
-  const {token }  = req.body
+export const verifyUserEmail = async (req: Request, res: Response) => {
+  const { token } = req.body;
   try {
-    if(!token){
-      res.status(400).json({success:false, message: "Token is missing"})
-      return
+    if (!token) {
+      res.status(400).json({ success: false, message: "Token is missing" });
+      return;
     }
+    const decodedUriToken = decodeURIComponent(token);
 
-     await jwt.verify(token,process.env.RESET__TOKEN_SECRET ||"fallbackResetPasswordTokenSecret",)
-  } catch (error) {
-    
-  }
-}
+    jwt.verify(
+      decodedUriToken.trim(),
+      process.env.EMAIL_VERIFICATION_TOKEN_SECRET ||
+        "fallbackEmailVerificationTokenSecret",
+      async (error, decode) => {
+        if(error?.name === 'TokenExpiredError') {
+          res.status(400).json({success:false,message:"Token Expired"})
+        }
+        if(!decode) {
+          res.status(400).json({success:false,message:"Invalid Token"})
+        }
+      }
+    );
+  } catch (error) {}
+};
