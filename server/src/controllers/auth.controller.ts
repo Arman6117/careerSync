@@ -51,6 +51,7 @@ export const registerUser = async (
       token: emailVerificationToken,
       expiresAt: new Date(Date.now() + 15 * 60 * 1000),
     });
+    console.log("New user from registering: ", newUser);
     await newUser.save();
 
     res.cookie("accessToken", accessToken, {
@@ -98,6 +99,7 @@ export const loginUser = async (req: Request, res: Response) => {
       return;
     }
     const existingUser = await User.findOne({ email }).select("+password");
+    console.log("Existing user from log in: ", existingUser);
 
     if (!existingUser) {
       res.status(404).json({ success: false, message: "User does not exists" });
@@ -262,13 +264,28 @@ export const verifyUserEmail = async (req: Request, res: Response) => {
       process.env.EMAIL_VERIFICATION_TOKEN_SECRET ||
         "fallbackEmailVerificationTokenSecret",
       async (error, decode) => {
-        if(error?.name === 'TokenExpiredError') {
-          res.status(400).json({success:false,message:"Token Expired"})
+        if (error?.name === "TokenExpiredError") {
+          res.status(400).json({ success: false, message: "Token Expired" });
         }
-        if(!decode) {
-          res.status(400).json({success:false,message:"Invalid Token"})
+        if (!decode) {
+          res.status(400).json({ success: false, message: "Invalid Token" });
         }
+
+        const user = await User.findById((decode as JwtPayload).id);
+        if (!user) {
+          res.status(404).json({ success: false, message: "User not found" });
+          return;
+        }
+
+        user.set("emailVerificationToken", []);
+        user.set("isVerified", true);
+        console.log("user from email verification: ", user);
+
+        await user.save();
       }
     );
-  } catch (error) {}
+    res.status(200).json({ success: true, message: "Email verified" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Something went wrong" });
+  }
 };
