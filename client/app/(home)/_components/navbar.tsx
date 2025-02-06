@@ -10,13 +10,13 @@ const Navbar = () => {
       <Logo />
       <div className="md:flex gap-7 hidden mt-1">
         <Link
-          className="font-semibold text-lg   transition-all hover:bg-gradient-to-b hover:bg-transparent hover:bg-clip-text hover:text-transparent from-pink-400 via-pink-500 to-pink-700 "
+          className="font-medium text-lg   transition-all hover:bg-gradient-to-b hover:bg-transparent hover:bg-clip-text hover:text-transparent from-pink-400 via-pink-500 to-pink-700 "
           href={"/dashboard/jobs"}
         >
           Jobs
         </Link>
         <Link
-          className="font-semibold text-lg   transition-all hover:bg-gradient-to-b hover:bg-transparent hover:bg-clip-text hover:text-transparent from-pink-400 via-pink-500 to-pink-700 "
+          className="font-medium text-lg   transition-all hover:bg-gradient-to-b hover:bg-transparent hover:bg-clip-text hover:text-transparent from-pink-400 via-pink-500 to-pink-700 "
           href={"/dashboard/mock-interview"}
         >
           Mock Interview
@@ -34,9 +34,7 @@ const Navbar = () => {
           size={"lg"}
           className="font-semibold text-lg text-white hover:bg-gradient-to-b hover:outline hover:outline-1 transition-all hover:outline-neutral-800  hover:bg-clip-text hover:text-transparent  rounded-full bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600"
         >
-          {" "}
           Sign Up
-          
         </Button>
       </div>
     </nav>

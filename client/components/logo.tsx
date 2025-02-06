@@ -1,9 +1,10 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 const Logo = () => {
   return (
-    <div className="flex gap-3 items-center justify-center">
+    <Link href={'/'} className="flex gap-3 items-center justify-center">
         <Image src={"/logo.svg"} alt="logo" width={40} height={40} />
         <div className="md:flex flex-col hidden">
           <span className="text-neutral-800 leading-5 font-bold text-lg ">
@@ -13,7 +14,7 @@ const Logo = () => {
             Find your dream job
           </span>
         </div>
-      </div>
+      </Link>
   )
 }
 
