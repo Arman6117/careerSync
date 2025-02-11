@@ -45,16 +45,16 @@ const WhySection = () => {
       </div>
       <div className="flex flex-wrap gap-3  items-center justify-center ">
         {cards.map((card) => (
-          <div key={card.no} className="flex bg-gray-200/30 h-[400px] gap-7 rounded-lg  w-[400px] flex-col px-5 py-3">
-            <div
-              className="  flex  justify-center  "
-              key={card.no}
-            >
+          <div
+            key={card.no}
+            className="flex bg-gray-200/30 h-[400px] gap-7 rounded-lg  w-[400px] flex-col px-5 py-3"
+          >
+            <div className="  flex  justify-center  " key={card.no}>
               <Image src={card.image} alt="image" width={250} height={250} />
             </div>
             <div className="flex flex-col">
-             <h2 className="text-[1.2rem]">{card.title}</h2>
-             <p className="text-gray-400 text-[10px]">{card.description}</p>
+              <h2 className="text-[1.2rem]">{card.title}</h2>
+              <p className="text-gray-400 text-[10px]">{card.description}</p>
             </div>
           </div>
         ))}
