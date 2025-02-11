@@ -48,7 +48,7 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-      <div >
+      <div>
         <Image
           src={"/square.svg"}
           alt="frm"
