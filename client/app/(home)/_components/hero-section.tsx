@@ -11,7 +11,7 @@ import { SiGlassdoor, SiIndeed, SiWellfound } from "react-icons/si";
 const HeroSection = () => {
   return (
     <div className="flex md:flex-row gap-20 flex-col max-w-screen-[1800px] sm:justify-between">
-      <div className=" w-full flex flex-col gap-4 h-scree bgred-300">
+      <div className=" w-full flex flex-col gap-4  bgred-300">
         <h1 className="sm:text-7xl text-5xl  md:text-[4.3rem] xl:text-8xl leading-[3rem] sm:leading-[5rem] ">
           Unlock Your <br />
           <span className="bg-gradient-to-br bg-transparent bg-clip-text text-transparent from-indigo-200 from-[-3%] via-35%  via-pink-500 to-[150%] to-amber-400">
@@ -48,7 +48,7 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-      <div className="  h-screen ">
+      <div >
         <Image
           src={"/square.svg"}
           alt="frm"
