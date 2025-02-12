@@ -1,9 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { generateRandomColor } from "@/lib/utils";
-import { Bookmark } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+
+import { generateRandomColor } from "@/lib/utils";
+
+import { Button } from "@/components/ui/button";
+
+import { Bookmark } from "lucide-react";
 
 const jobs = [
   {
