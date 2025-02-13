@@ -1,12 +1,13 @@
+import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-const Logo = () => {
+const Logo = ({className}:{className?:string}) => {
   return (
     <Link href={'/'} className="flex gap-3 items-center justify-center">
         <Image src={"/logo.svg"} alt="logo" width={40} height={40} />
-        <div className="md:flex flex-col hidden">
+        <div className={cn("md:flex flex-col hidden", className)}>
           <span className="text-neutral-800 leading-5 font-bold text-lg ">
             Career-Sync
           </span>
