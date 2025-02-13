@@ -41,12 +41,20 @@ const jobs = [
     jobPostDate: "12 January 2021",
     jobSalary: "₹10000/month",
   },
+  {
+    id: 5,
+    jobTitle: "Senior Backend Developer",
+    jobPosterImage: "/square.svg",
+    jobPosterName: "John Doe",
+    jobPostDate: "12 January 2021",
+    jobSalary: "₹10000/month",
+  },
 ];
 const JobSection = () => {
   return (
     <div className="flex flex-col gap-5 justify-center items-center">
       <div className="">
-        <h1 className=" sm:text-5xl text-2xl font-medium xl:text-5xl leading-[3rem] sm:leading-[3.5rem] text-center ">
+        <h1 className=" sm:text-5xl text-3xl font-medium xl:text-5xl  sm:leading-[3.5rem] text-center ">
           <span className="bg-gradient-to-br bg-transparent bg-clip-text text-transparent from-indigo-200 from-[-3%] via-35%  via-pink-500 to-[150%] to-amber-400">
             Find Your Match
           </span>
@@ -54,13 +62,13 @@ const JobSection = () => {
           <span>Job Here</span>
         </h1>
       </div>
-      <div className="flex sm:flex-wrap sm:flex-row flex-col sm:p-3 gap-10 justify-center">
+      <div className="flex sm:flex-wrap sm:flex-row flex-col w-full sm:p-3 gap-10 justify-center">
         {jobs.map((job) => {
           const color = generateRandomColor();
           return (
             <div
               key={job.id}
-              className="flex rounded-lg gap-4 flex-col  w-auto sm:w-[300px] h-[300px] bg-neutral-"
+              className="flex rounded-lg gap-4 flex-col   sm:w-[300px] h-[300px] bg-neutral-"
             >
               <div
                 className="h-[70%] p-4 rounded-lg"
