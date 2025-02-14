@@ -23,19 +23,23 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="flex gap-3">
-        <Button
-          variant={"outline"}
-          // size={"lg"}
-          className="font-semibold md:h-10  md:px-8 md:text-lg  border-neutral-800 rounded-full transition-all hover:bg-gradient-to-b hover:bg-transparent hover:bg-clip-text hover:text-transparent from-pink-400 via-pink-500 to-pink-700  "
-        >
-          Login
-        </Button>
+        <Link href={"/login"}>
+          <Button
+            variant={"outline"}
+            // size={"lg"}
+            className="font-semibold md:h-10  md:px-8 md:text-lg  border-neutral-800 rounded-full transition-all hover:bg-gradient-to-b hover:bg-transparent hover:bg-clip-text hover:text-transparent from-pink-400 via-pink-500 to-pink-700  "
+          >
+            Login
+          </Button>
+        </Link>
+        <Link href={'/register'}>
         <Button
           // size={"lg"}
           className="font-semibold  md:h-10  md:px-8  md:text-lg  text-white hover:bg-gradient-to-b hover:outline hover:outline-1 transition-all hover:outline-neutral-800  hover:bg-clip-text hover:text-transparent  rounded-full from-indigo-200 from-[-3%] via-35% bg-gradient-to-br via-pink-500 to-[150%]  to-amber-400"
-        >
+          >
           Sign Up
         </Button>
+          </Link>
       </div>
     </nav>
   );
