@@ -87,3 +87,18 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
+  .animate-pattern {
+    animation: animate-pattern-move 1000s infinite ;
+  }
+
+
+@keyframes animate-pattern-move {
+  from {
+    transform: translateX(0);
+  } 
+  to {
+    transform: translateX(100%);
+  }
+}
