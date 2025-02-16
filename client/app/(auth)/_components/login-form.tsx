@@ -1,15 +1,30 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { loginUser } from "@/actions/login";
 
 const LoginForm = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      loginUser({ email, password });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="h-[400px] shadow-indigo-950  rounded-lg shadow-2xl border-r px-4 flex-col gap-6 w-[300px] flex bg-white bg-gradient-to-br from-white from-[80%]  to-pink-600 via-indigo-300">
       <h1 className="text-2xl font-semibold mt-10 text-center">Login </h1>
-      <form className="flex flex-col gap-4 ">
+      <form className="flex flex-col gap-4 " onSubmit={onSubmit}>
         <div className="flex flex-col gap-2">
           <Label className="text-sm font-semibold ml-1">Email</Label>
           <Input
@@ -17,6 +32,7 @@ const LoginForm = () => {
             placeholder="john@example.com"
             type="email"
             required
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -28,6 +44,7 @@ const LoginForm = () => {
             maxLength={8}
             minLength={6}
             type="password"
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div className="flex justify-center">
@@ -37,7 +54,12 @@ const LoginForm = () => {
         </div>
         <div className="flex ga flex-col items-center ">
           <span className="text-center text-xs">Already have an Account ?</span>
-          <Link href={'/register'} className="text-[11px] hover:underline text-pink-600">Sign Up</Link>
+          <Link
+            href={"/register"}
+            className="text-[11px] hover:underline text-pink-600"
+          >
+            Sign Up
+          </Link>
         </div>
       </form>
     </div>
