@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 
 const LoginForm = () => {
   return (
-    <div className="h-[400px]  rounded-lg shadow-2xl border-r px-4 flex-col gap-6 w-[300px] flex bg-white bg-gradient-to-br from-white from-[80%]  to-pink-600 via-indigo-300">
+    <div className="h-[400px] shadow-indigo-950  rounded-lg shadow-2xl border-r px-4 flex-col gap-6 w-[300px] flex bg-white bg-gradient-to-br from-white from-[80%]  to-pink-600 via-indigo-300">
       <h1 className="text-2xl font-semibold mt-10 text-center">Login </h1>
       <form className="flex flex-col gap-4 ">
         <div className="flex flex-col gap-2">
