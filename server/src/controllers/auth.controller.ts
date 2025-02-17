@@ -99,7 +99,7 @@ export const loginUser = async (req: Request, res: Response) => {
       return;
     }
     const existingUser = await User.findOne({ email }).select("+password");
-    console.log("Existing user from log in: ", existingUser);
+    
 
     if (!existingUser) {
       res.status(404).json({ success: false, message: "User does not exists" });
