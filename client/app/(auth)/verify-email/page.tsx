@@ -1,12 +1,12 @@
-'use client'
+
 import React from 'react'
-import {useSearchParams} from 'next/navigation'
+import EmailVerificationForm from '../_components/email-verification-form'
+
 
 const EmailVerificationPage = () => {
-    const search = useSearchParams()
-    const token = search.get('token')?.replace('/', '')
+   
   return (
-    <div>{token}</div>
+   <EmailVerificationForm/>
   )
 }
 
