@@ -5,11 +5,10 @@ import { z } from "zod";
 
 import Link from "next/link";
 
-import { loginUser } from "@/actions/login";
+import { loginUser } from "@/actions";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Form,
   FormControl,
@@ -23,6 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
 
   const formSchema = z.object({
@@ -37,6 +37,7 @@ const LoginForm = () => {
       password: "",
     },
   });
+
   return (
     <div className="h-[400px] shadow-indigo-950  rounded-lg shadow-2xl border-r px-4 flex-col gap-6 w-[300px] flex bg-white bg-gradient-to-br from-white from-[80%]  to-pink-600 via-indigo-300">
       <h1 className="text-2xl font-semibold mt-10 text-center">Login </h1>
@@ -60,6 +61,9 @@ const LoginForm = () => {
                     {...field}
                   />
                 </FormControl>
+                {/* <FormMessage >
+                  Hello
+                </FormMessage> */}
               </FormItem>
             )}
           />
@@ -88,9 +92,7 @@ const LoginForm = () => {
             </Button>
           </div>
           <div className="flex ga flex-col items-center ">
-            <span className="text-center text-xs">
-              Already have an Account ?
-            </span>
+            <span className="text-center text-xs">Don't have an Account ?</span>
             <Link
               href={"/register"}
               className="text-[11px] hover:underline text-pink-600"
