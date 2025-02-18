@@ -1,6 +1,7 @@
 "use client";
 
 import { verifyEmail } from "@/actions";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
@@ -25,7 +26,7 @@ const EmailVerificationForm = () => {
     setIsLoading(true);
     try {
       const { message, success } = await verifyEmail({ token });
-      console.log(message)
+
       if (!success) {
         toast.error(message);
         return;
@@ -45,13 +46,21 @@ const EmailVerificationForm = () => {
     onSubmit();
   }, [onSubmit]);
   return (
-    <div className="h-[200px] shadow-indigo-950 items-center justify-center  rounded-lg shadow-2xl border-r px-4 flex-col gap-6 w-[300px] flex bg-white bg-gradient-to-br from-white from-[80%]  to-pink-600 via-indigo-300">
+    <div className="h-[200px] shadow-indigo-950 items-center justify-center  rounded-lg shadow-2xl border-r px-4 flex-col gap-5 w-[300px] flex bg-white bg-gradient-to-br from-white from-[80%]  to-pink-600 via-indigo-300">
       {isVerified ? (
-        <h1 className="font-semibold text-gray-700">Verifying Your Email</h1>
+        <div className="flex flex-col justify-center items-center">
+          <h1 className="font-semibold text-gray-700">Email Verified</h1>
+          <Link
+            href={"/login"}
+            className="text-[11px] hover:underline text-pink-600"
+          >
+           Back To Login
+          </Link>
+        </div>
       ) : (
-        <h1 className="font-semibold text-gray-700">Email Verified</h1>
+        <h1 className="font-semibold text-gray-700">Verifying Your Email</h1>
       )}
-      {isLoading && (
+      {!isVerified && isLoading && (
         <RiLoader3Line className="animate-spin text-gray-500 text-6xl " />
       )}
       {isVerified && <BsCheckCircleFill className="  text-gray-500 text-5xl" />}
