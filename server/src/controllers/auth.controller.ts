@@ -291,6 +291,7 @@ export const resendVerificationEmail = async (req: Request, res: Response) => {
   }
 };
 export const verifyUserEmail = async (req: Request, res: Response) => {
+  console.log("Triggered")
   const { token } = req.body;
   try {
     if (!token) {
