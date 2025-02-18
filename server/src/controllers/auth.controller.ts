@@ -19,11 +19,12 @@ export const registerUser = async (
     const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ email: email });
+    console.log(existingUser);
 
     if (existingUser) {
       res.status(409).json({
-        success: false,
         message: "Email already exists please login!",
+        success: false,
       });
       return;
     }
@@ -43,6 +44,7 @@ export const registerUser = async (
       email,
       emailVerificationToken
     );
+
     if (error) {
       res.status(500).json({ success: false, message: error });
       return;
@@ -99,7 +101,6 @@ export const loginUser = async (req: Request, res: Response) => {
       return;
     }
     const existingUser = await User.findOne({ email }).select("+password");
-    
 
     if (!existingUser) {
       res.status(404).json({ success: false, message: "User does not exists" });
@@ -249,7 +250,46 @@ export const resetUserPassword = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };
+export const resendVerificationEmail = async (req: Request, res: Response) => {
+  const { email } = req.body;
+  try {
+    if (!email) {
+      res.status(400).json({ message: "Email is missing", success: false });
+      return;
+    }
 
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      res.status(404).json({
+        message: "User does not exits please sign up",
+        success: false,
+      });
+      return;
+    }
+
+    const token = generateEmailVerificationToken(
+      existingUser._id as unknown as string
+    );
+
+    const { data, error } = await sendVerificationEmail(email, token);
+    if (error) {
+      res.status(500).json({ message: error.message, success: false });
+      return;
+    }
+    existingUser.emailVerificationToken.push({
+      token: token,
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+    });
+    await existingUser.save();
+
+    res.status(200).json({
+      success: true,
+      message: " Verification email sent successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong", success: false });
+  }
+};
 export const verifyUserEmail = async (req: Request, res: Response) => {
   const { token } = req.body;
   try {

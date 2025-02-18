@@ -13,7 +13,7 @@ export const sendResetPasswordEmail = async (
 
   return await resend.emails.send({
     from: "onboarding@resend.dev",
-    to: "armanp384@gmail.com",
+    to: email,
     subject: "Reset Password",
     html: `<p>Click on <a href=${resetLink}/> to reset your password</p>
     `,
@@ -27,7 +27,7 @@ export const sendVerificationEmail = async (
 
   return await resend.emails.send({
     from: "onboarding@resend.dev",
-    to: "armanp384@gmail.com",
+    to: email,
     subject: "Verify your email",
     html: `<p>Click here <a href=${resetLink}/> to verify your email</p>
     `,
