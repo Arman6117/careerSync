@@ -5,8 +5,9 @@ import { z } from "zod";
 
 import Link from "next/link";
 
-import { loginUser, registerUser } from "@/actions";
+import { registerUser } from "@/actions";
 
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -19,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const [message, setMessage] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -50,8 +51,11 @@ const LoginForm = () => {
         email,
         password,
       });
-      setMessage(message);
-      if (success) form.reset();
+      if (!success) toast.error(message);
+      if (success) {
+        form.reset();
+        toast.success(message);
+      }
     } catch (error) {
       setMessage("Something went wrong");
       console.log(error);
@@ -160,4 +164,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

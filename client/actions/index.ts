@@ -1,5 +1,5 @@
 "use server";
-import axios from "axios";
+import axios, {  AxiosError } from "axios";
 
 const api = process.env.NEXT_PUBLIC_API_URL;
 export const loginUser = async ({
@@ -15,6 +15,9 @@ export const loginUser = async ({
       .data;
     return { message, success };
   } catch (error) {
+    if (error instanceof AxiosError) {
+      return { message: error.response?.data.message, success: false };
+    }
     return { message: "Something went wrong", success: false };
   }
 };
@@ -36,6 +39,9 @@ export const registerUser = async ({
     ).data;
     return { message, success };
   } catch (error) {
+    if (error instanceof AxiosError) {
+      return { message: error.response?.data.message, success: false };
+    }
     return { message: "Something went wrong", success: false };
   }
 };
