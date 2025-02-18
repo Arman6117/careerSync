@@ -102,13 +102,19 @@ const LoginForm = () => {
             )}
           />
 
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center gap-3 justify-center">
             <Button
               disabled={isDisabled}
               className="w-36 font-semibold  rounded-sm hover:bg-white hover:text-black transition-all hover:bg-clip-text hover:outline hover:outline-black bg-gradient-to-br from-indigo-200 from-[-3%] via-35% via-pink-500 to-[150%]  to-amber-400 text-white"
             >
               Login
             </Button>
+          <Link
+              href={"/reset-password"}
+              className="text-[11px] hover:underline text-pink-600"
+            >
+                Forgot Password
+            </Link>
           </div>
           <div className="flex ga flex-col items-center ">
             <span className="text-center text-xs">Don't have an Account ?</span>
