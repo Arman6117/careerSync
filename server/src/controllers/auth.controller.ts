@@ -238,7 +238,8 @@ export const resetUserPassword = async (req: Request, res: Response) => {
         }
 
         user.set("resetPasswordToken", []);
-        await user.updateOne({ password: newPassword });
+        const hashedPassword = await bcryptjs.hash(newPassword, 10);
+        await user.updateOne({ password: hashedPassword });
         await user.save();
       }
     );
@@ -291,7 +292,7 @@ export const resendVerificationEmail = async (req: Request, res: Response) => {
   }
 };
 export const verifyUserEmail = async (req: Request, res: Response) => {
-  console.log("Triggered")
+  console.log("Triggered");
   const { token } = req.body;
   try {
     if (!token) {
