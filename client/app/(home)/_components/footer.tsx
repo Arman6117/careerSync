@@ -1,9 +1,10 @@
+import React from "react";
+
+import Link from "next/link";
+
 import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import { CgInstagram } from "react-icons/cg";
+
 import { FaFacebook, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {

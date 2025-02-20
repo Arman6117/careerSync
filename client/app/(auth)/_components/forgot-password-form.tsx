@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 
-import { Input } from "@/components/ui/input";
 import { sendForgotPassEmail } from "@/actions";
+
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 

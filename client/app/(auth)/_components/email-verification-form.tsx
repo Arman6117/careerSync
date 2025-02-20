@@ -1,13 +1,17 @@
 "use client";
 
-import { verifyEmail } from "@/actions";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+
+import Link from "next/link";
+
+import { verifyEmail } from "@/actions";
+
+import { toast } from "sonner";
+
 import { BsCheckCircleFill } from "react-icons/bs";
 import { RiLoader3Line } from "react-icons/ri";
-import { toast } from "sonner";
 
 const EmailVerificationForm = () => {
   const search = useSearchParams();
