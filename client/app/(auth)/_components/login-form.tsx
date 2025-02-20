@@ -110,7 +110,7 @@ const LoginForm = () => {
               Login
             </Button>
           <Link
-              href={"/reset-password"}
+              href={"/forgot-password"}
               className="text-[11px] hover:underline text-pink-600"
             >
                 Forgot Password

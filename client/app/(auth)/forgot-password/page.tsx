@@ -1,0 +1,12 @@
+import ForgotPasswordForm from "../_components/forgot-password-form";
+import ResetPasswordForm from "../_components/forgot-password-form";
+
+const ForgotPasswordPage = () => {
+  return (
+    <>
+      <ForgotPasswordForm />
+    </>
+  );
+};
+
+export default ForgotPasswordPage;

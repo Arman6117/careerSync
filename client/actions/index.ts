@@ -61,3 +61,17 @@ export const verifyEmail = async ({ token }: { token: string }) => {
     return { message: "Something went wrong", success: false };
   }
 };
+
+export const sendForgotPassEmail = async ({email}:{email:string}) => {
+  const url = `${api}/api/auth/forgot-password`
+
+  try {
+    const {message,success} = (await axios.post(url, {email})).data
+    return {message,success}
+  } catch (error) {
+    if(error instanceof AxiosError) {
+      return {message:error.response?.data.message,success:false}
+    }
+    return {message:"Something went wrong", success:false}
+  }
+}
