@@ -25,7 +25,7 @@ const LoginForm = () => {
 
   const formSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(6).max(8),
+    password: z.string().min(6).max(10),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -95,6 +95,7 @@ const LoginForm = () => {
                     disabled={isDisabled}
                     className="w-full border-gray-900 rounded-xl focus-visible:border-pink-600 focus-visible:ring-0 focus-visible:border-2 transition-all placeholder:text-xs"
                     placeholder="12345678"
+                    type="password"
                     {...field}
                   />
                 </FormControl>
