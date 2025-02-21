@@ -3,6 +3,7 @@
 import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import axios, { AxiosError } from "axios";
 
 import Link from "next/link";
 
@@ -14,7 +15,6 @@ import { BsCheckCircleFill } from "react-icons/bs";
 import { RiLoader3Line } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import axios, { AxiosError } from "axios";
 
 const EmailVerificationForm = () => {
   const search = useSearchParams();
