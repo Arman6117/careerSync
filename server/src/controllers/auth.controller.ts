@@ -307,10 +307,10 @@ export const verifyUserEmail = async (req: Request, res: Response) => {
         "fallbackEmailVerificationTokenSecret",
       async (error, decode) => {
         if (error?.name === "TokenExpiredError") {
-          res.status(400).json({ success: false, message: "Token Expired" });
+          res.status(401).json({ success: false, message: "Token Expired" });
         }
         if (!decode) {
-          res.status(400).json({ success: false, message: "Invalid Token" });
+          res.status(401).json({ success: false, message: "Invalid Token" });
         }
 
         const user = await User.findById((decode as JwtPayload).id);

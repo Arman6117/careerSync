@@ -58,7 +58,7 @@ const EmailVerificationForm = () => {
         return;
       }
       if (
-        (!success && message == "Link Expired") ||
+        (!success && message == "Token Expired") ||
         message == "NoTokenError"
       ) {
         toast.error(message);

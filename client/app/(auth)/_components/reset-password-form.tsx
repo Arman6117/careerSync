@@ -8,20 +8,31 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import Link from "next/link";
 
 const ResetPasswordForm = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
-  const  router =useRouter();
+  const router = useRouter();
 
   const searchParams = useSearchParams();
   const token = searchParams.get("token")?.replace("/", "");
 
   if (!token) {
     toast.error("No token provided");
-    return;
+    return (
+      <div className="h-[200px] shadow-indigo-950   justify-center items-center rounded-lg shadow-2xl border-r px-4 flex-col gap-4 w-[300px] flex bg-white bg-gradient-to-br from-white from-[80%]  to-pink-600 via-indigo-300">
+        <h1 className="font-semibold text-gray-700">No Token Provided</h1>
+
+        <Link
+          href={"/forgot-password"}
+          className="text-[11px] hover:underline text-pink-600"
+        >
+          Back To Forgot Password
+        </Link>
+      </div>
+    );
   }
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,7 +47,7 @@ const ResetPasswordForm = () => {
       });
       if (success) {
         toast.success(message);
-        router.push('/login')
+        router.push("/login");
       }
       if (!success) {
         toast.error(message);
@@ -50,7 +61,6 @@ const ResetPasswordForm = () => {
 
   return (
     <>
-     
       <form
         onSubmit={onSubmit}
         className="h-[200px] shadow-indigo-950   justify-center items-center rounded-lg shadow-2xl border-r px-4 flex-col gap-6 w-[300px] flex bg-white bg-gradient-to-br from-white from-[80%]  to-pink-600 via-indigo-300"
