@@ -46,7 +46,11 @@ export const registerUser = async ({
   }
 };
 
-export const verifyEmail = async ({ token }: { token: string }) => {
+export const verifyEmail = async ({
+  token,
+}: {
+  token: string;
+}): Promise<{ message: string; success: boolean }> => {
   const url = `${api}/api/auth/verify-email`;
 
   try {
