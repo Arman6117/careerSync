@@ -29,7 +29,7 @@ export const registerUser = async (
       return;
     }
 
-    const newUser = new User({ name, email, password });
+    const newUser = new User({ name, email, password, preferences: {} });
     const accessToken = generateAccessToken(newUser._id as unknown as string);
     const refreshToken = generateRefreshToken(newUser._id as unknown as string);
 
@@ -53,7 +53,8 @@ export const registerUser = async (
       token: emailVerificationToken,
       expiresAt: new Date(Date.now() + 15 * 60 * 1000),
     });
-    console.log("New user from registering: ", newUser);
+    // console.log("New user from registering: ", newUser);
+
     await newUser.save();
 
     res.cookie("accessToken", accessToken, {

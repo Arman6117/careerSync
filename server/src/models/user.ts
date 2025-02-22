@@ -28,8 +28,18 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   },
   preferences: {
-    type: Object,
-    default: {},
+    roles: { type: [String], default: [] },
+    locations: { type: [String], default: [] },
+    employmentType: { type: [String], default: [] },
+    experienceLevel: { type: String, default: "" },
+    salaryRange: { type: String, default: "" },
+    skills: { type: [String], default: [] },
+    industries: { type: [String], default: [] },
+    jobAlertFrequency: {
+      type: String,
+      enum: ["Daily", "Weekly", "None"],
+      default: "Weekly",
+    },
   },
   savedJobs: {
     type: Object,
@@ -39,10 +49,7 @@ const UserSchema = new mongoose.Schema({
     type: Object,
     default: {},
   },
-  skills: {
-    type: Object,
-    default: {},
-  },
+
   refreshTokens: [
     {
       token: String,
