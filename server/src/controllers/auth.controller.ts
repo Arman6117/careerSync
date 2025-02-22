@@ -53,7 +53,7 @@ export const registerUser = async (
       token: emailVerificationToken,
       expiresAt: new Date(Date.now() + 15 * 60 * 1000),
     });
-    // console.log("New user from registering: ", newUser);
+    
 
     await newUser.save();
 
