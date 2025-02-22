@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors({ origin: "http://localhost:3000" }))
 
 app.use("/api/auth", authRoutes)
-app.use("/api/userData", userRoutes)
+app.use("/api/profile", userRoutes)
 
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
