@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -16,13 +17,13 @@ import {
   FormField,
   FormItem,
   FormLabel,
-
 } from "@/components/ui/form";
 import { toast } from "sonner";
 
 const LoginForm = () => {
   const [isDisabled, setIsDisabled] = useState(false);
 
+  const router = useRouter();
   const formSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6).max(10),
@@ -47,6 +48,7 @@ const LoginForm = () => {
       if (success) {
         form.reset();
         toast.success(message);
+        router.push("/user");
       }
     } catch (error) {
       toast.error("Something went wrong");
@@ -110,11 +112,11 @@ const LoginForm = () => {
             >
               Login
             </Button>
-          <Link
+            <Link
               href={"/forgot-password"}
               className="text-[11px] hover:underline text-pink-600"
             >
-                Forgot Password
+              Forgot Password
             </Link>
           </div>
           <div className="flex ga flex-col items-center ">
